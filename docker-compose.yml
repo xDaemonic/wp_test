@@ -1,56 +1,56 @@
 version: "3.9"
 
 services:
-  wp-php:
+  wp-php-test:
     build: ./docker/php
-    container_name: wp-php
+    container_name: wp-php-test
     volumes:
       - ./wp:/var/www/domains/wp
     expose:
       - 9000
     networks:
-      - wp-network
+      - wp-network-test
 
-  wp-mysql:
+  wp-mysql-test:
     image: mysql:8.0
-    container_name: wp-mysql
+    container_name: wp-mysql-test
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
       MYSQL_DATABSE: "${DB_DATABASE}"
     volumes:
-      - wp-database:/var/lib/mysql
+      - wp-database-test:/var/lib/mysql
     expose:
       - 3306
     networks:
-      - wp-network
+      - wp-network-test
 
-  wp-nginx:
+  wp-nginx-test:
     image: nginx:1.27.0
-    container_name: wp-nginx
+    container_name: wp-nginx-test
     volumes:
       - ./wp:/var/www/domains/wp
       - ./docker/nginx:/etc/nginx/conf.d
     ports:
       - "127.0.0.1:8290:80"
     networks:
-      - wp-network
+      - wp-network-test
 
-  wp-adminer:
+  wp-adminer-test:
     image: adminer
-    container_name: wp-adminer
+    container_name: wp-adminer-test
     restart: always
     ports:
       - "127.0.0.1:8291:8080"
     networks:
-      - wp-network
+      - wp-network-test
     environment:
       ADMINER_DESIGN: haeckel
-      ADMINER_DEFAULT_SERVER: wp-mysql
+      ADMINER_DEFAULT_SERVER: wp-mysql-test
 
 
 networks:
-  wp-network:
+  wp-network-test:
     driver: bridge
 
 volumes:
-  wp-database:
+  wp-database-test:
